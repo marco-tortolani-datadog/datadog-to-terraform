@@ -1,4 +1,4 @@
-module github.com/juliogreff/datadog-to-terraform
+module github.com/DataDog/datadog-to-terraform
 
 go 1.14
 

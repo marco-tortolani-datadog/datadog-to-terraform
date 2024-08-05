@@ -672,7 +672,7 @@ func (widget *BoardWidget) UnmarshalJSON(data []byte) error {
 		}
 		widget.TraceServiceDefinition = &traceServiceWidget.Definition
 	default:
-		return fmt.Errorf("Cannot unmarshal widget of type: %s", *widgetHandler.Definition.Type)
+		return fmt.Errorf("cannot unmarshal widget of type: %s", *widgetHandler.Definition.Type)
 	}
 
 	return nil

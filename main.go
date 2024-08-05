@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/rodaine/hclencoder"
 
-	"github.com/juliogreff/datadog-to-terraform/pkg/types"
+	"github.com/DataDog/datadog-to-terraform/pkg/types"
 )
 
 const (
@@ -66,7 +67,7 @@ func main() {
 		fail("%s %s: unable to get resource: %s", resourceType, resourceId, err)
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fail("%s %s: unable to read response body: %s", resourceType, resourceId, err)
 	}
@@ -89,13 +90,22 @@ func main() {
 		resource.Board = dashboard
 	case monitorResource:
 		var monitor *types.Monitor
+		fmt.Print(string(body))
 		err = json.Unmarshal(body, &monitor)
 		if err != nil {
 			fail("%s %s: unable to parse JSON: %s", resourceType, resourceId, err)
 		}
+		// Adding tags and renaming for DNA-Processing team
+		monitor.AddRequiredTags()
+		monitor.MakeMessageHeredoc()
+		monitor.MakeQueryHeredoc()
+		monitor.AskForMuteTag()
+		monitor.AskForPriority()
+		monitor.AddSlackChannelNotify()
+		resource.Name = monitor.GetLowercaseName()
 
 		resource.Type = "datadog_monitor"
-		resource.Monitor = monitor
+ 		resource.Monitor = monitor
 	}
 
 	hcl, err := hclencoder.Encode(types.ResourceWrapper{
@@ -105,11 +115,19 @@ func main() {
 		fail("%s %s: unable to encode hcl: %s", resourceType, resourceId, err)
 	}
 
-	fmt.Println(string(hcl))
+	hclString := string(hcl)
+	hclString = FixHeredocQuotes(hclString)
+	
+
+	fmt.Println(hclString)
 }
 
 func fail(format string, a ...interface{}) {
 	fmt.Fprintf(os.Stderr, format, a...)
 	fmt.Fprintln(os.Stderr)
 	os.Exit(1)
+}
+
+func FixHeredocQuotes(s string) string {
+	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "\"<<-EOF", "<<-EOF"), "\"EOF", "EOF"), "EOF\"", "EOF")
 }
