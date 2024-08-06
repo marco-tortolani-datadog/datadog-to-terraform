@@ -78,13 +78,21 @@ func (m *Monitor) GetLowercaseName() string {
 	return strings.ToLower(strings.ReplaceAll(*m.Name, " ", "_"))
 }
 
+func (m *Monitor) StripQueryQuotes() {
+	*m.Query = strings.Trim(*m.Query, "\"")
+}
+
 func (m *Monitor) MakeQueryHeredoc() {
-	*m.Query =  "<<-EOF\n" + strings.Trim(*m.Query, "\"") + "\nEOF"
+	*m.Query =  "<<-EOF\n" + *m.Query + "\nEOF"
 }
 
 // Write a function that takes the multiline string monitor.Message and converts it into heredoc format by stripping the leading and trailing quotation marks and adding a leading and trailing EOF markers
+func (m *Monitor) StripMessageQuotes() {
+	*m.Message =  strings.Trim(*m.Message, "\"")
+}
+
 func (m *Monitor) MakeMessageHeredoc() {
-	*m.Message =  "<<-EOF\n" + strings.Trim(*m.Message, "\"") + "\nEOF"
+	*m.Message =  "<<-EOF\n" + *m.Message + "\nEOF"
 }
 
 // Write a function that requests user input on the command line for whether the monitor should be muted, and if so it should add a tag "tf-mute:true" to the monitor.tags array
@@ -105,13 +113,13 @@ func (m *Monitor) AskForMuteTag() {
 }
 
 // write a function that the user for a priority level for an integer 1-5 or the option to skip for the monitor.priority field if it is not already set
-func (m *Monitor) AskForPriority() {
+func (m *Monitor) AskForPriorityTag() {
 	if m.Priority != nil {
 		return
 	}
 	var priority int
 	for {
-		print("Enter a priority level for this monitor (1-5) or 0 to skip: ")
+		print("Would you like to add a priority tag? (1-5) or 0 to skip: ")
 		_, err := fmt.Scan(&priority)
 		if err != nil {
 			fmt.Println("Invalid input, skipping priority")
@@ -128,5 +136,21 @@ func (m *Monitor) AskForPriority() {
 func (m *Monitor) AddSlackChannelNotify() {
 	if !strings.Contains(*m.Message, "${var.slack_channel_notify}") {
 		*m.Message += "\t${var.slack_channel_notify}"
+	}
+}
+
+func (m *Monitor) AskForPagerDutySlack() {
+	var mute string
+	for {
+		print("Would you like to include a pager duty message? (y/n): ")
+		_, err := fmt.Scan(&mute)
+		if err != nil {
+			fmt.Println("Please enter a valid input")
+			continue
+		}
+		if strings.ToLower(mute) == "y" || strings.ToLower(mute) == "yes" {
+			*m.Message += "\t${var.pagerduty_notify}"
+		}
+		break
 	}
 }

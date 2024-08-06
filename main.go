@@ -90,20 +90,24 @@ func main() {
 		resource.Board = dashboard
 	case monitorResource:
 		var monitor *types.Monitor
-		fmt.Print(string(body))
 		err = json.Unmarshal(body, &monitor)
 		if err != nil {
 			fail("%s %s: unable to parse JSON: %s", resourceType, resourceId, err)
 		}
 		// Adding tags and renaming for DNA-Processing team
 		monitor.AddRequiredTags()
-		monitor.MakeMessageHeredoc()
-		monitor.MakeQueryHeredoc()
 		monitor.AskForMuteTag()
-		monitor.AskForPriority()
-		monitor.AddSlackChannelNotify()
-		resource.Name = monitor.GetLowercaseName()
+		monitor.AskForPriorityTag()
+		
+		monitor.StripQueryQuotes()
+		monitor.MakeQueryHeredoc()
 
+		monitor.StripMessageQuotes()
+		monitor.AddSlackChannelNotify()
+		monitor.AskForPagerDutySlack()
+		monitor.MakeMessageHeredoc()
+
+		resource.Name = monitor.GetLowercaseName()
 		resource.Type = "datadog_monitor"
  		resource.Monitor = monitor
 	}
@@ -120,6 +124,7 @@ func main() {
 	
 
 	fmt.Println(hclString)
+
 }
 
 func fail(format string, a ...interface{}) {
