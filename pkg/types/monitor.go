@@ -40,20 +40,20 @@ func (tf *NoDataTimeframe) UnmarshalJSON(data []byte) error {
 }
 
 type Options struct {
-	// NoDataTimeframe   NoDataTimeframe   `json:"no_data_timeframe,omitempty" hcl:"no_data_timeframe"`
-	// NotifyAudit       *bool             `json:"notify_audit,omitempty" hcl:"notify_audit"`
-	// NotifyNoData      *bool             `json:"notify_no_data,omitempty" hcl:"notify_no_data"`
-	// RenotifyInterval  *int              `json:"renotify_interval,omitempty" hcl:"renotify_interval"`
-	// NewHostDelay      *int              `json:"new_host_delay,omitempty" hcl:"new_host_delay"`
-	// EvaluationDelay   *int              `json:"evaluation_delay,omitempty" hcl:"evaluation_delay"`
-	// TimeoutH          *int              `json:"timeout_h,omitempty" hcl:"timeout_h"`
-	// EscalationMessage *string           `json:"escalation_message,omitempty" hcl:"escalation_message"`
-	// Thresholds        *ThresholdCount   `json:"thresholds,omitempty" hcl:"monitor_thresholds"`
-	// ThresholdWindows  *ThresholdWindows `json:"threshold_windows,omitempty" hcl:"monitor_threshold_windows"`
-	// IncludeTags       *bool             `json:"include_tags,omitempty" hcl:"include_tags"`
-	// RequireFullWindow *bool             `json:"require_full_window,omitempty" hcl:"require_full_window"`
-	// Locked            *bool             `json:"locked,omitempty" hcl:"locked"`
-	// EnableLogsSample  *bool             `json:"enable_logs_sample,omitempty" hcl:"enable_logs_sample"`
+	NoDataTimeframe   NoDataTimeframe   `json:"no_data_timeframe,omitempty" hcl:"no_data_timeframe"`
+	NotifyAudit       *bool             `json:"notify_audit,omitempty" hcl:"notify_audit"`
+	NotifyNoData      *bool             `json:"notify_no_data,omitempty" hcl:"notify_no_data"`
+	RenotifyInterval  *int              `json:"renotify_interval,omitempty" hcl:"renotify_interval"`
+	NewHostDelay      *int              `json:"new_host_delay,omitempty" hcl:"new_host_delay"`
+	EvaluationDelay   *int              `json:"evaluation_delay,omitempty" hcl:"evaluation_delay"`
+	TimeoutH          *int              `json:"timeout_h,omitempty" hcl:"timeout_h"`
+	EscalationMessage *string           `json:"escalation_message,omitempty" hcl:"escalation_message"`
+	Thresholds        *ThresholdCount   `json:"thresholds,omitempty" hcl:"monitor_thresholds"`
+	ThresholdWindows  *ThresholdWindows `json:"threshold_windows,omitempty" hcl:"monitor_threshold_windows"`
+	IncludeTags       *bool             `json:"include_tags,omitempty" hcl:"include_tags"`
+	RequireFullWindow *bool             `json:"require_full_window,omitempty" hcl:"require_full_window"`
+	Locked            *bool             `json:"locked,omitempty" hcl:"locked"`
+	EnableLogsSample  *bool             `json:"enable_logs_sample,omitempty" hcl:"enable_logs_sample"`
 }
 
 // Monitor allows watching a metric or check that you care about,
