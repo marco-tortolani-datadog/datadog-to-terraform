@@ -76,7 +76,6 @@ func main() {
 		fail("%s %s: %s: %s", resourceType, resourceId, resp.Status, body)
 	}
 
-	fmt.Println(string(body))
 	resource := types.Resource{Name: resourceId}
 
 	switch resourceType {
