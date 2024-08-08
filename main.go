@@ -76,6 +76,7 @@ func main() {
 		fail("%s %s: %s: %s", resourceType, resourceId, resp.Status, body)
 	}
 
+	fmt.Println(string(body))
 	resource := types.Resource{Name: resourceId}
 
 	switch resourceType {
@@ -97,7 +98,7 @@ func main() {
 		// Adding tags and renaming for DNA-Processing team
 		monitor.AddRequiredTags()
 		monitor.AskForMuteTag()
-		monitor.AskForPriorityTag()
+		// monitor.AskForPriorityTag() # turn on to prompt user for priority tag
 		
 		monitor.StripQueryQuotes()
 		monitor.MakeQueryHeredoc()

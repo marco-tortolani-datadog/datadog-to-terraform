@@ -54,6 +54,8 @@ type Options struct {
 	RequireFullWindow *bool             `json:"require_full_window,omitempty" hcl:"require_full_window"`
 	Locked            *bool             `json:"locked,omitempty" hcl:"locked"`
 	EnableLogsSample  *bool             `json:"enable_logs_sample,omitempty" hcl:"enable_logs_sample"`
+	NewGroupDelay     *int              `json:"new_group_delay,omitempty" hcl:"new_group_delay"`
+	AvalancheWindow   *int              `json:"avalanche_window,omitempty" hcl:"avalanche_window"`
 }
 
 // Monitor allows watching a metric or check that you care about,
